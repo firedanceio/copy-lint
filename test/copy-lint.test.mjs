@@ -109,3 +109,27 @@ test('CLI exits 1 on errors in rules-only mode', () => {
   try { execFileSync('node', ['bin/copy-lint.mjs', '-c', 'examples/copy-lint.json', '--rules-only'], { stdio: 'pipe' }); } catch (e) { code = e.status; }
   assert.equal(code, 1);
 });
+
+test('authenticity checks flag stock phrases, flat rhythm, missing first person and bold-label lists', async () => {
+  const { checkAuthenticity } = await import('../lib/authenticity.mjs');
+  const flat = Array.from({ length: 16 }, (_, i) => ({ file: 'a.md', line: i + 1, text: 'This product helps people control their lights with ease every day.' }));
+  flat.push({ file: 'a.md', line: 13, text: 'Let’s dive into the seamless world of lighting.' });
+  const source = ['- **One:** a', '- **Two:** b', '- **Three:** c', '- **Four:** d'].join('\n');
+  const rules = checkAuthenticity(flat, true, { 'a.md': source }).map((f) => f.rule);
+  for (const r of ['stock-phrase', 'rhythm', 'first-person', 'bold-bullets']) assert.ok(rules.includes(r), r);
+
+  const human = [
+    'We tried three ways to do this before one worked.',
+    'The first was a disaster.',
+    'Our router, of all things, was the reason none of the bulbs would pair, and it took us two weeks of evenings to work that out.',
+    'Then it clicked.',
+    'We switched one setting, restarted it, and every bulb joined on the first try, which honestly felt like magic after the fortnight we had spent on it.',
+    'So check the network first.',
+    'It costs five minutes.',
+    'We wish someone had told us, because we lost most of a month to it and nearly gave up on two brands entirely.',
+    'Now it is the first thing we look at.',
+    'Every time.',
+    'Our test room has fifty-odd lights in it now, and when one misbehaves we start with the router and work outwards from there before touching the bulb.',
+  ].map((text, i) => ({ file: 'b.md', line: i + 1, text }));
+  assert.deepEqual(checkAuthenticity(human, true, { 'b.md': '' }).filter((f) => f.rule !== 'stock-phrase'), []);
+});

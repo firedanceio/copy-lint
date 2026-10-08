@@ -59,6 +59,29 @@ if Claude's safety checks decline a batch, the API retries it on a recommended f
 For other providers copy-lint asks for JSON and parses it defensively. A batch that fails is
 reported and skipped, never guessed.
 
+## Sounding like a person
+
+Add `"authenticity": true` to `copy-lint.json` to flag habits that make copy read as generic or
+machine-written:
+
+| Check | Flags |
+|---|---|
+| `stock-phrase` | Filler such as "delve", "seamless", "unlock", "let's dive in", "whether you're" |
+| `rhythm` | A piece where every sentence is about the same length |
+| `first-person` | A longer piece with no "we" or "I": no sign anyone actually did anything |
+| `bold-bullets` | Lists where every item starts with a bold label |
+
+With a model configured, the review also flags general claims and stock transitions, and asks for a
+specific detail in their place. It never invents one: if a line needs a fact the text doesn't have,
+it tells you.
+
+Tune it with an object instead of `true`, e.g.
+`{ "minRhythmVariation": 0.35, "minFirstPersonPer100Words": 0 }`.
+
+These checks don't predict what an AI detector will say. In our testing, what moved detector scores
+most was specific, first-hand detail: real numbers, real names, things that actually happened. The
+checks point you at the lines that lack it.
+
 ## What it reads
 
 | Files | Copy taken from |
