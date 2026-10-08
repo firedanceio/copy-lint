@@ -1,0 +1,19 @@
+{
+  "name": "copy-lint",
+  "version": "0.1.0",
+  "description": "Check website and app copy against your own style guide: fast rule checks plus a review by the model of your choice (Claude, OpenAI, or any OpenAI-compatible endpoint such as Ollama or LM Studio). CLI and GitHub Action.",
+  "type": "module",
+  "bin": { "copy-lint": "bin/copy-lint.mjs" },
+  "exports": "./lib/index.mjs",
+  "files": ["bin", "lib", "action.yml"],
+  "engines": { "node": ">=22" },
+  "scripts": { "test": "node --test" },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.132.1"
+  },
+  "keywords": ["copywriting", "style-guide", "linter", "llm", "claude", "ollama", "github-action", "byo-model"],
+  "repository": { "type": "git", "url": "git+https://github.com/firedanceio/copy-lint.git" },
+  "homepage": "https://github.com/firedanceio/copy-lint",
+  "license": "Apache-2.0",
+  "author": "Firedance (https://firedance.io)"
+}

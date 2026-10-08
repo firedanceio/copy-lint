@@ -1,0 +1,17 @@
+{
+  "guide": "STYLE.md",
+  "include": ["**/*.{md,html}"],
+  "exclude": ["STYLE.md"],
+  "banned": [
+    "seamless",
+    "seamlessly",
+    { "phrase": "unlock", "suggestion": "Say what the person can now do" },
+    "magic",
+    "game-changing",
+    { "phrase": "—", "suggestion": "Use a full stop, comma or colon" }
+  ],
+  "patterns": [
+    { "pattern": "^[^.!]*\\?$", "message": "Avoid questions as headlines or labels", "severity": "warning" }
+  ],
+  "maxSentenceWords": 30
+}

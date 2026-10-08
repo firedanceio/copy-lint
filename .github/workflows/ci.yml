@@ -1,0 +1,21 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      - run: npm test
+  action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the action on the example (rules only, expected to find errors)
+        id: lint
+        continue-on-error: true
+        uses: ./
+        with: { config: examples/copy-lint.json, rules-only: 'true' }
+      - run: test "${{ steps.lint.outcome }}" = "failure"
